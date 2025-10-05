@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.scss";
-import axios from "axios";
-
-const Api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  headers: {
-    common: {
-      "Content-Type": "application/json",
-    },
-  },
-});
+import Api from "./Api";
 
 type FaturaData = {
   date: Date;
@@ -21,7 +12,7 @@ function App() {
   const [faturas, setFaturas] = useState<FaturaData[]>([]);
 
   useEffect(() => {
-    Api.get("faturas")
+    Api.post("faturas")
       .then((res) => setFaturas(res.data))
       .catch((err) => console.error("Erro ao buscar as faturas:", err));
   }, []);
@@ -31,7 +22,7 @@ function App() {
       {faturas.slice(0, 5).map((f, i) => (
         <div key={i}>
           <p>
-            {new Date(f.date).toLocaleDateString()} - {f.title}
+            {f.date.toLocaleDateString()} - {f.title}
           </p>
           <p>R$ {f.amount}</p>
         </div>
